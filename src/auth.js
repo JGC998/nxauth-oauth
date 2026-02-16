@@ -18,6 +18,7 @@ export const {
     ...authConfig,
     adapter: PrismaAdapter(prisma),
     session: { strategy: "jwt" },
+    trustHost: true,
     providers: [
         Google,
         GitHub,
