@@ -19,6 +19,7 @@ export const {
     adapter: PrismaAdapter(prisma),
     session: { strategy: "jwt" },
     trustHost: true,
+    allowDangerousEmailAccountLinking: true,
     providers: [
         Google,
         GitHub,
