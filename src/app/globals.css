@@ -1,90 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  --header-height: 40px;
+    /* Vibrant Palette */
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --secondary: #ec4899;
+    /* Pink 500 */
+    --secondary-foreground: #ffffff;
+    --accent: #8b5cf6;
+    /* Violet 500 */
+    --accent-foreground: #ffffff;
+
+    --background: #f8fafc;
+    /* Slate 50 */
+    --foreground: #0f172a;
+    /* Slate 900 */
+
+    --card: rgba(255, 255, 255, 0.8);
+    --card-foreground: #1e293b;
+
+    --border: #e2e8f0;
+    --input: #e2e8f0;
+    --ring: #3b82f6;
+
+    --radius: 0.75rem;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+@layer base {
+    body {
+        @apply bg-slate-50 text-slate-900 antialiased;
+        background-image:
+            radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+            radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
+            radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.1) 0px, transparent 50%);
+        background-attachment: fixed;
+    }
 }
 
-html,
-body {
-  max-width: 100vw;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+@layer utilities {
+    .glass {
+        @apply bg-white/90 backdrop-blur-md border border-white/50 shadow-lg supports-[backdrop-filter]:bg-white/60;
+    }
 
+    .glass-card {
+        @apply bg-white/90 backdrop-blur-sm border border-slate-200/60 shadow-sm hover:shadow-md transition-all duration-300 supports-[backdrop-filter]:bg-white/70;
+    }
 
-header {
-  padding: 0 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: var(--header-height);
-  background-color: gainsboro;
-}
+    .text-gradient {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600;
+    }
 
-main {
-  padding-left: 50px;
-}
+    .btn-primary {
+        @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-white transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+    }
 
-h1 { 
-  font-size: 2.6rem;
-}
+    .btn-primary:hover {
+        @apply -translate-y-0.5 shadow-lg shadow-blue-500/30;
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    }
 
-h1, h2 {
-  margin-top: 50px;
-}
+    .btn-secondary {
+        @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 shadow-sm transition-all hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2;
+    }
 
-a {
-  /* color: inherit;*/
-  text-decoration: none; 
-  margin-right: 16px;
-  font-weight: 700;
-
-}
-
-a:hover {
-  color:blue;
-  text-shadow: 0 0 1px rgb(0, 0, 0)
-}
-
-
-section.auth {
-  height: calc( 100vh - var(--header-height));
-  border: solid 1px darkgray;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-
-/* form {
-  background-color: antiquewhite;
-  padding: 40px;
-  border-radius: 10px;
-} */
-
-button {
-  font-size: inherit;
-  background-color: whitesmoke;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 16px;
-  border-radius: 5px;
-  border: solid 1px lightgray;
-  margin: 1px;
-}
-
-button:hover {
-  background-color: white;
-  outline: solid 1px gray;
-}
-
-button:active {
-  outline: solid 2px black;
+    .input-field {
+        @apply flex w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200;
+    }
 }
