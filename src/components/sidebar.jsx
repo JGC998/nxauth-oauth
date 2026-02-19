@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, LogOut, Home } from 'lucide-react';
+import { LayoutDashboard, Users, LogOut, Home, GraduationCap, UserSquare, BookOpen } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 
 export default function Sidebar({ user }) {
@@ -15,13 +15,56 @@ export default function Sidebar({ user }) {
             icon: LayoutDashboard,
             role: 'USER', // Visible for everyone (User & Admin)
         },
+    ];
+
+    const schoolItems = [
         {
-            name: 'Admin Panel',
-            href: '/admin',
+            name: 'Grupos',
+            href: '/grupos',
             icon: Users,
-            role: 'ADMIN', // Only for Admin
+            role: 'USER', // Visible for everyone
+        },
+        {
+            name: 'Estudiantes',
+            href: '/estudiantes',
+            icon: UserSquare,
+            role: 'USER',
+        },
+        {
+            name: 'Asignaturas',
+            href: '/asignaturas',
+            icon: BookOpen,
+            role: 'USER',
         },
     ];
+
+    const adminItems = [
+        {
+            name: 'Admin Usuarios',
+            href: '/admin',
+            icon: GraduationCap,
+            role: 'ADMIN', // Only for Admin
+        },
+        {
+            name: 'Gestionar Grupos',
+            href: '/admin/grupos',
+            icon: Users,
+            role: 'ADMIN',
+        },
+        {
+            name: 'Gestionar Estudiantes',
+            href: '/admin/estudiantes',
+            icon: UserSquare,
+            role: 'ADMIN',
+        },
+        {
+            name: 'Gestionar Asignaturas',
+            href: '/admin/asignaturas',
+            icon: BookOpen,
+            role: 'ADMIN',
+        },
+    ];
+
 
     const isActive = (path) => pathname === path;
 
@@ -51,8 +94,6 @@ export default function Sidebar({ user }) {
                     </div>
 
                     {menuItems.map((item) => {
-                        if (item.role === 'ADMIN' && user.role !== 'ADMIN') return null;
-
                         const isActiveItem = isActive(item.href);
                         return (
                             <Link
@@ -68,6 +109,57 @@ export default function Sidebar({ user }) {
                             </Link>
                         );
                     })}
+
+                    <div className="pt-4 pb-2">
+                        <p className="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                            Datos Escolares
+                        </p>
+                    </div>
+
+                    {schoolItems.map((item) => {
+                        const isActiveItem = pathname.startsWith(item.href);
+                        return (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${isActiveItem
+                                    ? 'bg-primary/10 text-primary shadow-sm font-semibold'
+                                    : 'text-slate-500 hover:bg-slate-50 hover:text-primary'
+                                    }`}
+                            >
+                                <item.icon className={`w-5 h-5 ${isActiveItem ? 'text-primary' : 'text-slate-400 group-hover:text-primary'}`} />
+                                {item.name}
+                            </Link>
+                        );
+                    })}
+
+                    {user.role === 'ADMIN' && (
+                        <>
+                            <div className="pt-4 pb-2">
+                                <p className="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                    Administración
+                                </p>
+                            </div>
+
+                            {adminItems.map((item) => {
+                                const isActiveItem = pathname.startsWith(item.href);
+                                return (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${isActiveItem
+                                            ? 'bg-primary/10 text-primary shadow-sm font-semibold'
+                                            : 'text-slate-500 hover:bg-slate-50 hover:text-primary'
+                                            }`}
+                                    >
+                                        <item.icon className={`w-5 h-5 ${isActiveItem ? 'text-primary' : 'text-slate-400 group-hover:text-primary'}`} />
+                                        {item.name}
+                                    </Link>
+                                );
+                            })}
+                        </>
+                    )}
+
                 </nav>
             </div>
 

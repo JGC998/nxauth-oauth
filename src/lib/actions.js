@@ -188,3 +188,149 @@ export async function adminUpdateUser(prevState, formData) {
         return { error: "Error al actualizar usuario" };
     }
 }
+
+// --- GRUPOS ADMIN ACTIONS ---
+
+export async function adminCreateGrupo(prevState, formData) {
+    const session = await import("@/auth").then(m => m.auth());
+    if (session?.user?.role !== 'ADMIN') return { error: "No autorizado" };
+
+    const nombre = formData.get("nombre");
+    const tutor = formData.get("tutor");
+    const aula = formData.get("aula");
+
+    if (!nombre || !tutor || !aula) return { error: "Todos los campos son obligatorios" };
+
+    try {
+        await prisma.grupo.create({
+            data: { nombre, tutor, aula }
+        });
+        return { success: true, message: "Grupo creado correctamente" };
+    } catch (err) {
+        console.error(err);
+        if (err.code === 'P2002') {
+            return { error: "Ya existe un grupo con ese nombre" };
+        }
+        return { error: "Error al crear grupo" };
+    }
+}
+
+export async function adminDeleteGrupo(prevState, formData) {
+    const session = await import("@/auth").then(m => m.auth());
+    if (session?.user?.role !== 'ADMIN') return { error: "No autorizado" };
+
+    const grupoId = formData.get("grupoId");
+    if (!grupoId) return { error: "ID de grupo es obligatorio" };
+
+    try {
+        await prisma.grupo.delete({
+            where: { id: parseInt(grupoId) }
+        });
+        return { success: true, message: "Grupo eliminado" };
+    } catch (err) {
+        console.error(err);
+        return { error: "Error al eliminar grupo" };
+    }
+}
+
+// --- ESTUDIANTES ADMIN ACTIONS ---
+
+export async function adminCreateEstudiante(prevState, formData) {
+    const session = await import("@/auth").then(m => m.auth());
+    if (session?.user?.role !== 'ADMIN') return { error: "No autorizado" };
+
+    const nombre = formData.get("nombre");
+    const fecha_nacimiento = formData.get("fecha_nacimiento");
+    const tutor_legal = formData.get("tutor_legal");
+    const grupoId = formData.get("grupoId");
+
+    if (!nombre || !fecha_nacimiento || !tutor_legal) {
+        return { error: "Nombre, fecha de nacimiento y tutor legal son obligatorios" };
+    }
+
+    try {
+        const data = {
+            nombre,
+            fecha_nacimiento: new Date(fecha_nacimiento),
+            tutor_legal
+        };
+
+        if (grupoId && grupoId !== "") {
+            data.grupoId = parseInt(grupoId);
+        }
+
+        await prisma.estudiante.create({ data });
+        return { success: true, message: "Estudiante creado correctamente" };
+    } catch (err) {
+        console.error(err);
+        return { error: "Error al crear estudiante" };
+    }
+}
+
+export async function adminDeleteEstudiante(prevState, formData) {
+    const session = await import("@/auth").then(m => m.auth());
+    if (session?.user?.role !== 'ADMIN') return { error: "No autorizado" };
+
+    const estudianteId = formData.get("estudianteId");
+    if (!estudianteId) return { error: "ID de estudiante es obligatorio" };
+
+    try {
+        await prisma.estudiante.delete({
+            where: { id: parseInt(estudianteId) }
+        });
+        return { success: true, message: "Estudiante eliminado" };
+    } catch (err) {
+        console.error(err);
+        return { error: "Error al eliminar estudiante" };
+    }
+}
+
+// --- ASIGNATURAS ADMIN ACTIONS ---
+
+export async function adminCreateAsignatura(prevState, formData) {
+    const session = await import("@/auth").then(m => m.auth());
+    if (session?.user?.role !== 'ADMIN') return { error: "No autorizado" };
+
+    const nombre = formData.get("nombre");
+    const profesor = formData.get("profesor");
+    const horas_semana = formData.get("horas_semana");
+
+    if (!nombre || !horas_semana) {
+        return { error: "Nombre y horas por semana son obligatorios" };
+    }
+
+    try {
+        const data = {
+            nombre,
+            horas_semana: parseInt(horas_semana)
+        };
+
+        if (profesor && profesor !== "") {
+            data.profesor = profesor;
+        }
+
+        await prisma.asignatura.create({ data });
+        return { success: true, message: "Asignatura creada correctamente" };
+    } catch (err) {
+        console.error(err);
+        return { error: "Error al crear asignatura" };
+    }
+}
+
+export async function adminDeleteAsignatura(prevState, formData) {
+    const session = await import("@/auth").then(m => m.auth());
+    if (session?.user?.role !== 'ADMIN') return { error: "No autorizado" };
+
+    const asignaturaId = formData.get("asignaturaId");
+    if (!asignaturaId) return { error: "ID de asignatura es obligatorio" };
+
+    try {
+        await prisma.asignatura.delete({
+            where: { id: parseInt(asignaturaId) }
+        });
+        return { success: true, message: "Asignatura eliminada" };
+    } catch (err) {
+        console.error(err);
+        return { error: "Error al eliminar asignatura" };
+    }
+}

@@ -53,3 +53,33 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Grupo {
+  id     Int    @id @default(autoincrement())
+  nombre String @unique
+  tutor  String
+  aula   String
+
+  estudiantes Estudiante[]
+}
+
+model Estudiante {
+  id               Int      @id @default(autoincrement())
+  nombre           String
+  fecha_nacimiento DateTime
+  foto             String?
+  tutor_legal      String
+
+  asignaturas Asignatura[]
+  grupoId     Int?
+  grupo       Grupo?       @relation(fields: [grupoId], references: [id])
+}
+
+model Asignatura {
+  id           Int     @id @default(autoincrement())
+  nombre       String
+  profesor     String?
+  horas_semana Int
+
+  estudiantes Estudiante[]
+}
