@@ -87,6 +87,10 @@ export async function register(prevState, formData) {
     }
 }
 
+export async function loginGitHub() {
+    await signIn("github");
+}
+
 // Acción para login social
 export async function socialLogin(provider) {
     await signIn(provider);

@@ -1,3 +1,5 @@
+import GitHub from "next-auth/providers/github"
+
 export const authConfig = {
     pages: {
         signIn: '/auth/login',
@@ -12,16 +14,16 @@ export const authConfig = {
 
             if (isOnDashboard) {
                 if (isLoggedIn) return true;
-                return false; // Redirigir a login
+                return false;
             }
 
             if (isOnAdmin) {
                 if (isLoggedIn && auth?.user?.role === 'ADMIN') return true;
-                return false; // Redirigir a login o página de error/acceso denegado si es usuario normal
+                return false;
             }
 
             return true;
         },
     },
-    providers: [], // Los proveedores se configuran en auth.js para evitar dependencias de Node en middleware
+    providers: [GitHub], // DEBES incluir GitHub aquí para el middleware
 }
